@@ -1,0 +1,12 @@
+<RCC>
+  <qresource prefix="images">
+    <file>uvman-16.png</file>
+	<file>uvman-24.png</file>
+	<file>uvman-32.png</file>
+	<file>uvman-48.png</file>
+	<file>uvman-64.png</file>
+	<file>uvman-128.png</file>
+	<file>uvman-256.png</file>
+	<file>uvman-512.png</file>	
+  </qresource>
+</RCC>
