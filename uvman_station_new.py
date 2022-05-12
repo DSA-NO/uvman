@@ -14,7 +14,7 @@ class UVManStationNew(QDialog):
     def accept(self):   
         try:     
             name, active, latitude, longitude, comment = '', False, 0, 0, ''
-            ftpHost, ftpUser, ftpPassword, ftpRemoteDir, ftpLocalDir = '', '', '', '', ''
+            ftpHost, ftpUser, ftpPassword, ftpRemoteDir, ftpLocalDir, ftpPassiveMode = '', '', '', '', '', True
 
             if not self.ui.editName.text():
                 UVLog.show_error("Missing name for new station")
@@ -22,7 +22,7 @@ class UVManStationNew(QDialog):
 
             name = self.ui.editName.text()
 
-            active = self.ui.cbActive.isChecked()            
+            active = self.ui.cbActive.isChecked()
 
             if self.ui.editLatitude.text():
                 latitude = float(self.ui.editLatitude.text())
@@ -45,6 +45,8 @@ class UVManStationNew(QDialog):
             if self.ui.editFTPLocalDir.text():
                 ftpLocalDir = self.ui.editFTPLocalDir.text()
 
+            ftpPassiveMode = self.ui.cbFTPPassiveMode.isChecked()
+            
             if self.ui.editComment.text():
                 comment = self.ui.editComment.text()
 
@@ -60,8 +62,9 @@ class UVManStationNew(QDialog):
             self.model.setData(self.model.index(row, 6), ftpUser)
             self.model.setData(self.model.index(row, 7), ftpPassword)
             self.model.setData(self.model.index(row, 8), ftpRemoteDir)
-            self.model.setData(self.model.index(row, 9), ftpLocalDir)
+            self.model.setData(self.model.index(row, 9), ftpLocalDir)            
             self.model.setData(self.model.index(row, 10), comment)
+            self.model.setData(self.model.index(row, 11), ftpPassiveMode)
             if not self.model.submitAll():
                 self.model.revertAll()
                 UVLog.show_error("Unable to create station " + name)

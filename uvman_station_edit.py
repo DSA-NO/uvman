@@ -21,13 +21,14 @@ class UVManStationEdit(QDialog):
         self.ui.editFTPUser.setText(record.value(6))
         self.ui.editFTPPassword.setText(record.value(7))
         self.ui.editFTPRemoteDir.setText(record.value(8))
-        self.ui.editFTPLocalDir.setText(record.value(9))
-        self.ui.editComment.setText(record.value(10))        
+        self.ui.editFTPLocalDir.setText(record.value(9))        
+        self.ui.editComment.setText(record.value(10))
+        self.ui.cbFTPPassiveMode.setChecked(record.value(11))
 
     def accept(self):   
         try:     
             name, active, latitude, longitude, comment = '', False, 0, 0, ''
-            ftpHost, ftpUser, ftpPassword, ftpRemoteDir, ftpLocalDir = '', '', '', '', ''
+            ftpHost, ftpUser, ftpPassword, ftpRemoteDir, ftpLocalDir, ftpPassiveMode = '', '', '', '', '', True
 
             if not self.ui.editName.text():
                 UVLog.show_error("Missing name for new station")
@@ -35,7 +36,7 @@ class UVManStationEdit(QDialog):
 
             name = self.ui.editName.text()
 
-            active = self.ui.cbActive.isChecked()            
+            active = self.ui.cbActive.isChecked()
 
             if self.ui.editLatitude.text():
                 latitude = float(self.ui.editLatitude.text())
@@ -57,6 +58,8 @@ class UVManStationEdit(QDialog):
 
             if self.ui.editFTPLocalDir.text():
                 ftpLocalDir = self.ui.editFTPLocalDir.text()
+                
+            ftpPassiveMode = self.ui.cbFTPPassiveMode.isChecked()
 
             if self.ui.editComment.text():
                 comment = self.ui.editComment.text()
@@ -73,8 +76,9 @@ class UVManStationEdit(QDialog):
             self.model.setData(self.model.index(row, 6), ftpUser)
             self.model.setData(self.model.index(row, 7), ftpPassword)
             self.model.setData(self.model.index(row, 8), ftpRemoteDir)
-            self.model.setData(self.model.index(row, 9), ftpLocalDir)
+            self.model.setData(self.model.index(row, 9), ftpLocalDir)            
             self.model.setData(self.model.index(row, 10), comment)
+            self.model.setData(self.model.index(row, 11), ftpPassiveMode)
             if not self.model.submitAll():
                 self.model.revertAll()
                 UVLog.show_error("Unable to update station " + name)

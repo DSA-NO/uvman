@@ -20,8 +20,9 @@ class UVMAN_Models():
         self.station.setHeaderData(6, Qt.Horizontal, "FTP User")
         self.station.setHeaderData(7, Qt.Horizontal, "FTP Password")
         self.station.setHeaderData(8, Qt.Horizontal, "FTP Remote Dir")
-        self.station.setHeaderData(9, Qt.Horizontal, "FTP Local Dir")
+        self.station.setHeaderData(9, Qt.Horizontal, "FTP Local Dir")        
         self.station.setHeaderData(10, Qt.Horizontal, "Comment")    
+        self.station.setHeaderData(11, Qt.Horizontal, "FTP Passive Mode")
 
         # Instrument model
         self.instrument = QSqlRelationalTableModel(parent, conn)
