@@ -28,13 +28,15 @@ class UVManager(QMainWindow):
         UVLog.init(log, self.ui.statusBar)
         UVLog.log_message('Loading GUI')
 
-        config_dir = os.path.expandvars(r'%PUBLIC%\uvnet')
-        os.makedirs(config_dir, exist_ok = True)
-        settings_file = "uvman.ini"
-        settings_path = Path(config_dir) / settings_file
-        self.settings = QSettings(str(settings_path), QSettings.IniFormat)
+        script_dir = Path( __file__ ).parent.absolute()
+        UVLog.log_message("Using script directory: %s" % script_dir) 
 
-        UVLog.log_message("Settings file: " + str(settings_path))                  
+        config_file = script_dir / "config.ini"
+        if not config_file.exists():
+            raise UVManagerException("No config file found (%s)" % config_file)
+        UVLog.log_message("Using config file: %s" % config_file) 
+                
+        self.settings = QSettings(str(config_file), QSettings.IniFormat)        
 
     def initialize(self, log):
 

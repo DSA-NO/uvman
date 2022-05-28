@@ -2,7 +2,6 @@
 
 import os, logging
 from pathlib import Path
-
 from logging.handlers import RotatingFileHandler
 
 def create_log(name):
@@ -10,10 +9,9 @@ def create_log(name):
     logging.basicConfig(level=logging.INFO, format=logfmt)
     uvlogger = logging.getLogger(name)
 
-    logdir = os.path.expandvars(r'%PUBLIC%\uvnet')
-    os.makedirs(logdir, exist_ok = True)
+    script_dir = Path( __file__ ).parent.absolute()    
     logfile = name + ".log"
-    logpath = Path(logdir) / logfile
+    logpath = script_dir / logfile
 
     handler = RotatingFileHandler(logpath, maxBytes=1000000, backupCount=5)
     formatter = logging.Formatter(logfmt)
