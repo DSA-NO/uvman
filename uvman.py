@@ -124,7 +124,7 @@ class UVManager(QMainWindow):
         # Connect signals
         UVLog.log_message('Connecting signals')
 
-        self.ui.tabs.currentChanged.connect(self.tabsCurrentChanged)
+        self.ui.tabs.currentChanged.connect(self.onTabsCurrentChanged)
         self.ui.tabs.setCurrentIndex(1)
         
         self.ui.btnStationNew.clicked.connect(self.onNewStation)
@@ -145,7 +145,7 @@ class UVManager(QMainWindow):
         self.ui.cboxFactorsInstruments.currentIndexChanged.connect(self.uvman_factors.onSelectFactors)
         self.ui.cboxFactorsProducts.currentIndexChanged.connect(self.uvman_factors.onSelectFactors)
 
-    def tabsCurrentChanged(self, index):
+    def onTabsCurrentChanged(self, index):
         if index == 4:
             self.uvman_factors.onSelectFactors()
 
