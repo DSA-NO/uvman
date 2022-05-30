@@ -1,17 +1,17 @@
 from PyQt5.QtCore import QDateTime, Qt
-from PyQt5.QtSql import QSqlDatabase, QSqlQuery
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
-from uvman_delegates import ChannelFormatDelegate
+from PyQt5.QtSql import QSqlDatabase, QSqlQuery
+from uvman_delegate import ChannelFormatDelegate
 from uvman_uvlog import UVLog
 from uvman_station_select import UVManStationSelect
 
-class UVMAN_Measurements():
+class UVMAN_Measurement():
     def __init__(self, parent):        
-        self.settings = parent.settings
         self.parent = parent
+        self.settings = self.parent.settings        
         self.ui = self.parent.ui
-        self.instrumentModel = self.parent.models.instrument
-        self.stationModel = self.parent.models.station
+        self.models = self.parent.models        
 
         cdt = QDateTime.currentDateTime()
         self.ui.dtMeasurementsFrom.setDateTime(cdt.addDays(-1))
@@ -19,12 +19,31 @@ class UVMAN_Measurements():
 
         self.channelFormat_delegate = ChannelFormatDelegate()
 
-    def onMeasurementsSearch(self):               
+        self.ui.cboxMeasurementsStation.setModel(self.models.station)
+        vcMeasurementsStation = self.models.station.fieldIndex('label')
+        self.ui.cboxMeasurementsStation.setModelColumn(vcMeasurementsStation)  
+
+        self.ui.cboxMeasurementsInstrument.setModel(self.models.instrument)
+        vcMeasurementsInstrument = self.models.instrument.fieldIndex('id')
+        self.ui.cboxMeasurementsInstrument.setModelColumn(vcMeasurementsInstrument)  
+
+        header = self.ui.tblMeasurements.horizontalHeader()
+        header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)       
+        #header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+        header.setDefaultAlignment(Qt.AlignLeft)                    
+
+        self.ui.btnMeasurementsSearch.clicked.connect(self.onSearch)      
+        self.ui.btnMeasurementsEnablePrincipal.clicked.connect(self.onEnablePrincipal)      
+        self.ui.btnMeasurementsDisablePrincipal.clicked.connect(self.onDisablePrincipal)      
+        self.ui.btnMeasurementsSetStation.clicked.connect(self.onSetStation)      
+        self.ui.btnMeasurementsDelete.clicked.connect(self.onDelete)  
+
+    def onSearch(self):               
         try:
-            instrumentIndex = self.instrumentModel.index(self.ui.cboxMeasurementsInstrument.currentIndex(), self.instrumentModel.fieldIndex("id"))
-            instrumentID = self.instrumentModel.data(instrumentIndex)            
-            stationIndex = self.stationModel.index(self.ui.cboxMeasurementsStation.currentIndex(), self.stationModel.fieldIndex("id"))
-            stationID = self.stationModel.data(stationIndex) 
+            instrumentIndex = self.models.instrument.index(self.ui.cboxMeasurementsInstrument.currentIndex(), self.models.instrument.fieldIndex("id"))
+            instrumentID = self.models.instrument.data(instrumentIndex)            
+            stationIndex = self.models.station.index(self.ui.cboxMeasurementsStation.currentIndex(), self.models.station.fieldIndex("id"))
+            stationID = self.models.station.data(stationIndex) 
             dtFrom = self.ui.dtMeasurementsFrom.dateTime()
             dtFromStr = dtFrom.toString("yyyy-MM-dd HH:mm:ss")            
             dtTo = self.ui.dtMeasurementsTo.dateTime()
@@ -83,10 +102,10 @@ class UVMAN_Measurements():
             UVLog.show_error("No rows selected")
             return
 
-        instrumentIndex = self.instrumentModel.index(self.ui.cboxMeasurementsInstrument.currentIndex(), self.instrumentModel.fieldIndex("id"))
-        instrumentID = self.instrumentModel.data(instrumentIndex)            
-        stationIndex = self.stationModel.index(self.ui.cboxMeasurementsStation.currentIndex(), self.stationModel.fieldIndex("id"))
-        stationID = self.stationModel.data(stationIndex) 
+        instrumentIndex = self.models.instrument.index(self.ui.cboxMeasurementsInstrument.currentIndex(), self.models.instrument.fieldIndex("id"))
+        instrumentID = self.models.instrument.data(instrumentIndex)            
+        stationIndex = self.stationModel.index(self.ui.cboxMeasurementsStation.currentIndex(), self.models.station.fieldIndex("id"))
+        stationID = self.models.station.data(stationIndex) 
         dtFromStr = self.ui.tblMeasurements.item(indexes[0].row(), 1).text()
         dtToStr = self.ui.tblMeasurements.item(indexes[-1].row(), 1).text()        
 
@@ -135,9 +154,9 @@ class UVMAN_Measurements():
             UVLog.show_error("No rows selected")
             return
 
-        instrumentIndex = self.instrumentModel.index(self.ui.cboxMeasurementsInstrument.currentIndex(), self.instrumentModel.fieldIndex("id"))
-        instrumentID = self.instrumentModel.data(instrumentIndex)            
-        stationIndex = self.stationModel.index(self.ui.cboxMeasurementsStation.currentIndex(), self.stationModel.fieldIndex("id"))
+        instrumentIndex = self.models.instrument.index(self.ui.cboxMeasurementsInstrument.currentIndex(), self.models.instrument.fieldIndex("id"))
+        instrumentID = self.models.instrument.data(instrumentIndex)
+        stationIndex = self.models.station.index(self.ui.cboxMeasurementsStation.currentIndex(), self.models.station.fieldIndex("id"))
         stationID = self.stationModel.data(stationIndex) 
         dtFromStr = self.ui.tblMeasurements.item(indexes[0].row(), 1).text()
         dtToStr = self.ui.tblMeasurements.item(indexes[-1].row(), 1).text()        
@@ -174,8 +193,8 @@ class UVMAN_Measurements():
         dlg.setWindowModality(Qt.ApplicationModal)
         if dlg.exec_() != QDialog.Accepted:
             return        
-        instrumentIndex = self.instrumentModel.index(self.ui.cboxMeasurementsInstrument.currentIndex(), self.instrumentModel.fieldIndex("id"))
-        instrumentID = self.instrumentModel.data(instrumentIndex)                    
+        instrumentIndex = self.models.instrument.index(self.ui.cboxMeasurementsInstrument.currentIndex(), self.models.instrument.fieldIndex("id"))
+        instrumentID = self.models.instrument.data(instrumentIndex)                    
         conn = QSqlDatabase.database('query')
         conn.transaction()
         query = QSqlQuery(conn)        
@@ -208,9 +227,9 @@ class UVMAN_Measurements():
         ret = QMessageBox.question(self.parent, 'Confirmation', "Are you sure you want to delete these measurements?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if ret == QMessageBox.No:
             return
-        instrumentIndex = self.instrumentModel.index(self.ui.cboxMeasurementsInstrument.currentIndex(), self.instrumentModel.fieldIndex("id"))
-        instrumentID = self.instrumentModel.data(instrumentIndex)                    
-        stationIndex = self.stationModel.index(self.ui.cboxMeasurementsStation.currentIndex(), self.stationModel.fieldIndex("id"))
+        instrumentIndex = self.models.instrument.index(self.ui.cboxMeasurementsInstrument.currentIndex(), self.models.instrument.fieldIndex("id"))
+        instrumentID = self.models.instrument.data(instrumentIndex)                    
+        stationIndex = self.models.station.index(self.ui.cboxMeasurementsStation.currentIndex(), self.models.station.fieldIndex("id"))
         stationID = self.stationModel.data(stationIndex) 
         conn = QSqlDatabase.database('query')
         conn.transaction()

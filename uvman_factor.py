@@ -1,24 +1,34 @@
 from PyQt5.QtCore import QDateTime, Qt
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
-from uvman_delegates import ChannelFormatDelegate
+from uvman_delegate import ChannelFormatDelegate
 from uvman_uvlog import UVLog
 
-class UVMAN_Factors():
+class UVMAN_Factor():
     def __init__(self, parent):        
-        self.settings = parent.settings
         self.parent = parent
+        self.settings = parent.settings        
         self.ui = self.parent.ui
-        self.instrumentModel = self.parent.models.instrument
-        self.productModel = self.parent.models.product
-        self.channelFormat_delegate = ChannelFormatDelegate()        
+        self.models = self.parent.models        
+        self.channelFormat_delegate = ChannelFormatDelegate()  
 
-    def onSelectFactors(self):               
+        self.ui.cboxFactorsInstruments.setModel(self.models.instrument)
+        viewColumn = self.models.instrument.fieldIndex('id')
+        self.ui.cboxFactorsInstruments.setModelColumn(viewColumn)
+
+        self.ui.cboxFactorsProducts.setModel(self.models.product)
+        viewColumn = self.models.product.fieldIndex('label')
+        self.ui.cboxFactorsProducts.setModelColumn(viewColumn)
+        
+        self.ui.cboxFactorsInstruments.currentIndexChanged.connect(self.onSelectFactor)
+        self.ui.cboxFactorsProducts.currentIndexChanged.connect(self.onSelectFactor)      
+
+    def onSelectFactor(self):               
         try:
-            instrumentIndex = self.instrumentModel.index(self.ui.cboxFactorsInstruments.currentIndex(), self.instrumentModel.fieldIndex("id"))
-            instrumentID = self.instrumentModel.data(instrumentIndex)            
-            productIndex = self.productModel.index(self.ui.cboxFactorsProducts.currentIndex(), self.productModel.fieldIndex("id"))
-            productID = self.productModel.data(productIndex)
+            instrumentIndex = self.models.instrument.index(self.ui.cboxFactorsInstruments.currentIndex(), self.models.instrument.fieldIndex("id"))
+            instrumentID = self.models.instrument.data(instrumentIndex)            
+            productIndex = self.models.product.index(self.ui.cboxFactorsProducts.currentIndex(), self.models.product.fieldIndex("id"))
+            productID = self.models.product.data(productIndex)
 
             conn = QSqlDatabase.database('query')
             query = QSqlQuery(conn)        
