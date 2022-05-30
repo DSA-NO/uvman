@@ -27,7 +27,7 @@ class UVMAN_Instrument():
         self.ui.btnInstrumentDelete.clicked.connect(self.onDelete)                
 
     def onNew(self):    
-        dlg = UVManInstrumentNew(self.parent, self.models.instrument, self.models.station)
+        dlg = UVManInstrumentNew(self.parent)
         dlg.setWindowModality(Qt.ApplicationModal)
         dlg.exec_()        
 
@@ -36,7 +36,7 @@ class UVMAN_Instrument():
         if not index.isValid():            
             UVLog.show_error("No row selected")
             return
-        dlg = UVManInstrumentEdit(self.parent, index, self.models.instrument, self.models.station)
+        dlg = UVManInstrumentEdit(self.parent, index)
         dlg.setWindowModality(Qt.ApplicationModal)
         dlg.exec_()        
 

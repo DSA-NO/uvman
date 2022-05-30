@@ -6,19 +6,20 @@ from datetime import datetime
 from uvman_uvlog import UVLog
 
 class UVManInstrumentEdit(QDialog):
-    def __init__(self, parent, index, model, stationModel):
+    def __init__(self, parent, index):
         super(UVManInstrumentEdit, self).__init__(parent)    
 
-        self.ui = uic.loadUi('uvman_instrument_edit.ui', self)   
-        self.settings = parent.settings
-        self.index = index
-        self.model = model
-        self.stationModel = stationModel           
-        self.ui.cboxStation.setModel(self.stationModel)        
-        viewColumn = self.stationModel.fieldIndex('label')
+        self.parent = parent
+        self.settings = self.parent.settings
+        self.models = self.parent.models        
+        self.index = index        
+        self.ui = uic.loadUi('uvman_instrument_edit.ui', self)                   
+
+        self.ui.cboxStation.setModel(self.models.station)
+        viewColumn = self.models.station.fieldIndex('label')
         self.ui.cboxStation.setModelColumn(viewColumn)  
 
-        record = self.model.record(self.index.row())      
+        record = self.models.instrument.record(self.index.row())      
 
         self.ui.editID.setText(str(record.value(0)))
         self.ui.editName.setText(str(record.value(1)))        
@@ -49,8 +50,8 @@ class UVManInstrumentEdit(QDialog):
                 return
             name = self.ui.editName.text()
             
-            stationIndex = self.stationModel.index(self.cboxStation.currentIndex(), self.stationModel.fieldIndex("id"))
-            stationID = self.stationModel.data(stationIndex)            
+            stationIndex = self.models.station.index(self.cboxStation.currentIndex(), self.models.station.fieldIndex("id"))
+            stationID = self.models.station.data(stationIndex)            
             if not stationID:
                 UVLog.show_error("Missing station ID for instrument")
                 return
@@ -78,25 +79,24 @@ class UVManInstrumentEdit(QDialog):
                 conn.commit()
 
             row = self.index.row()
-            self.model.setData(self.model.index(row, 0), id)
-            self.model.setData(self.model.index(row, 1), name)
-            self.model.setData(self.model.index(row, 2), stationID)
-            self.model.setData(self.model.index(row, 3), active)
-            self.model.setData(self.model.index(row, 4), principal)
-            self.model.setData(self.model.index(row, 5), model)
-            self.model.setData(self.model.index(row, 6), channelCount)
-            self.model.setData(self.model.index(row, 7), lastCalibrated)
-            self.model.setData(self.model.index(row, 8), fetchModule)
-            self.model.setData(self.model.index(row, 9), validateModule)
-            self.model.setData(self.model.index(row, 10), storeModule)
-            self.model.setData(self.model.index(row, 11), matchExpression)            
-            self.model.setData(self.model.index(row, 14), comment)
-            if not self.model.submitAll():                    
-                self.model.revertAll()
-                raise Exception("Unable to update instrument %s" % (id)) 
-                            
-            self.model.select()
-            self.close()             
-                    
+            minst = self.models.instrument
+            minst.setData(minst.index(row, 0), id)
+            minst.setData(minst.index(row, 1), name)
+            minst.setData(minst.index(row, 2), stationID)
+            minst.setData(minst.index(row, 3), active)
+            minst.setData(minst.index(row, 4), principal)
+            minst.setData(minst.index(row, 5), model)
+            minst.setData(minst.index(row, 6), channelCount)
+            minst.setData(minst.index(row, 7), lastCalibrated)
+            minst.setData(minst.index(row, 8), fetchModule)
+            minst.setData(minst.index(row, 9), validateModule)
+            minst.setData(minst.index(row, 10), storeModule)
+            minst.setData(minst.index(row, 11), matchExpression)            
+            minst.setData(minst.index(row, 14), comment)
+            if not minst.submitAll():                    
+                minst.revertAll()
+                raise Exception("Unable to update instrument %s" % (id))       
+            minst.select()
+            self.close()                    
         except Exception as ex:
             UVLog.show_error(str(ex), True)

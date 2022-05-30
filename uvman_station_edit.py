@@ -4,15 +4,17 @@ from PyQt5.QtWidgets import QDialog
 from uvman_uvlog import UVLog
 
 class UVManStationEdit(QDialog):
-    def __init__(self, parent, index, model):
+    def __init__(self, parent, index):
         super(UVManStationEdit, self).__init__(parent)    
 
-        self.ui = uic.loadUi('uvman_station_edit.ui', self)    
-        self.settings = parent.settings
-        self.index = index
-        self.model = model
+        self.parent = parent
+        self.settings = self.parent.settings
+        self.models = self.parent.models
+        self.index = index        
 
-        record = self.model.record(self.index.row())
+        self.ui = uic.loadUi('uvman_station_edit.ui', self)            
+
+        record = self.models.station.record(self.index.row())
         self.ui.editName.setText(record.value(1))        
         self.ui.cbActive.setChecked(record.value(2))
         self.ui.editLatitude.setText(str(record.value(3)))
@@ -67,23 +69,24 @@ class UVManStationEdit(QDialog):
             #_log.info("Updating station " + name)    
             UVLog.show_message("Updating station " + name)
             
-            row = self.index.row()            
-            self.model.setData(self.model.index(row, 1), name)
-            self.model.setData(self.model.index(row, 2), active)
-            self.model.setData(self.model.index(row, 3), latitude)
-            self.model.setData(self.model.index(row, 4), longitude)
-            self.model.setData(self.model.index(row, 5), ftpHost)
-            self.model.setData(self.model.index(row, 6), ftpUser)
-            self.model.setData(self.model.index(row, 7), ftpPassword)
-            self.model.setData(self.model.index(row, 8), ftpRemoteDir)
-            self.model.setData(self.model.index(row, 9), ftpLocalDir)            
-            self.model.setData(self.model.index(row, 10), comment)
-            self.model.setData(self.model.index(row, 11), ftpPassiveMode)
-            if not self.model.submitAll():
-                self.model.revertAll()
+            row = self.index.row()  
+            mstat = self.models.station          
+            mstat.setData(mstat.index(row, 1), name)
+            mstat.setData(mstat.index(row, 2), active)
+            mstat.setData(mstat.index(row, 3), latitude)
+            mstat.setData(mstat.index(row, 4), longitude)
+            mstat.setData(mstat.index(row, 5), ftpHost)
+            mstat.setData(mstat.index(row, 6), ftpUser)
+            mstat.setData(mstat.index(row, 7), ftpPassword)
+            mstat.setData(mstat.index(row, 8), ftpRemoteDir)
+            mstat.setData(mstat.index(row, 9), ftpLocalDir)            
+            mstat.setData(mstat.index(row, 10), comment)
+            mstat.setData(mstat.index(row, 11), ftpPassiveMode)
+            if not mstat.submitAll():
+                mstat.revertAll()
                 UVLog.show_error("Unable to update station " + name)
                 return
-            self.model.select()
+            mstat.select()
             self.close() 
         except Exception as ex:
             UVLog.show_error(str(ex), True)

@@ -4,12 +4,14 @@ from PyQt5.QtWidgets import QDialog
 from uvman_uvlog import UVLog
 
 class UVManProductNew(QDialog):
-    def __init__(self, parent, model):
+    def __init__(self, parent):
         super(UVManProductNew, self).__init__(parent)    
 
-        self.ui = uic.loadUi('uvman_product_new.ui', self) 
-        self.settings = parent.settings
-        self.model = model
+        self.parent = parent
+        self.settings = self.parent.settings
+        self.models = parent.models
+
+        self.ui = uic.loadUi('uvman_product_new.ui', self)         
 
     def accept(self):   
         try:                 
@@ -21,14 +23,15 @@ class UVManProductNew(QDialog):
 
             UVLog.show_message("Creating new product " + name)    
 
-            row = self.model.rowCount()
-            self.model.insertRow(row)
-            self.model.setData(self.model.index(row, 1), name)            
-            if not self.model.submitAll():
-                self.model.revertAll()
+            mprod = self.models.product
+            row = mprod.rowCount()
+            mprod.insertRow(row)
+            mprod.setData(mprod.index(row, 1), name)            
+            if not mprod.submitAll():
+                mprod.revertAll()
                 UVLog.show_error("Unable to create product " + name)
                 return
-            self.model.select()
+            mprod.select()
             self.close() 
         except Exception as ex:
             UVLog.show_error(str(ex), True)

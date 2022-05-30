@@ -31,7 +31,7 @@ class UVMAN_Station():
         self.ui.btnStationDelete.clicked.connect(self.onDelete)               
 
     def onNew(self):    
-        dlg = UVManStationNew(self.parent, self.models.station)
+        dlg = UVManStationNew(self.parent)
         dlg.setWindowModality(Qt.ApplicationModal)
         dlg.exec_()        
 
@@ -40,7 +40,7 @@ class UVMAN_Station():
         if not index.isValid():        
             UVLog.show_error("No row selected")
             return
-        dlg = UVManStationEdit(self.parent, index, self.models.station)
+        dlg = UVManStationEdit(self.parent, index)
         dlg.setWindowModality(Qt.ApplicationModal)
         dlg.exec_()        
 

@@ -25,7 +25,7 @@ class UVMAN_Product():
         self.ui.btnProductsDelete.clicked.connect(self.onDelete)
 
     def onNew(self):
-        dlg = UVManProductNew(self.parent, self.models.product)
+        dlg = UVManProductNew(self.parent)
         dlg.setWindowModality(Qt.ApplicationModal)
         dlg.exec_()        
 
@@ -34,7 +34,7 @@ class UVMAN_Product():
         if not index.isValid():            
             UVLog.show_error("No row selected")
             return
-        dlg = UVManProductEdit(self.parent, index, self.models.product)
+        dlg = UVManProductEdit(self.parent, index)
         dlg.setWindowModality(Qt.ApplicationModal)
         dlg.exec_()        
 

@@ -4,12 +4,14 @@ from PyQt5.QtWidgets import QDialog
 from uvman_uvlog import UVLog
 
 class UVManStationNew(QDialog):
-    def __init__(self, parent, model):
+    def __init__(self, parent):
         super(UVManStationNew, self).__init__(parent)    
 
-        self.ui = uic.loadUi('uvman_station_new.ui', self) 
-        self.settings = parent.settings
-        self.model = model
+        self.parent = parent
+        self.settings = self.parent.settings
+        self.models = self.parent.models
+
+        self.ui = uic.loadUi('uvman_station_new.ui', self)         
 
     def accept(self):   
         try:     
@@ -52,24 +54,25 @@ class UVManStationNew(QDialog):
 
             UVLog.show_message("Creating new station " + name)    
 
-            row = self.model.rowCount()
-            self.model.insertRow(row)
-            self.model.setData(self.model.index(row, 1), name)
-            self.model.setData(self.model.index(row, 2), active)
-            self.model.setData(self.model.index(row, 3), latitude)
-            self.model.setData(self.model.index(row, 4), longitude)
-            self.model.setData(self.model.index(row, 5), ftpHost)
-            self.model.setData(self.model.index(row, 6), ftpUser)
-            self.model.setData(self.model.index(row, 7), ftpPassword)
-            self.model.setData(self.model.index(row, 8), ftpRemoteDir)
-            self.model.setData(self.model.index(row, 9), ftpLocalDir)            
-            self.model.setData(self.model.index(row, 10), comment)
-            self.model.setData(self.model.index(row, 11), ftpPassiveMode)
-            if not self.model.submitAll():
-                self.model.revertAll()
+            mstat = self.models.station
+            row = mstat.rowCount()
+            mstat.insertRow(row)
+            mstat.setData(mstat.index(row, 1), name)
+            mstat.setData(mstat.index(row, 2), active)
+            mstat.setData(mstat.index(row, 3), latitude)
+            mstat.setData(mstat.index(row, 4), longitude)
+            mstat.setData(mstat.index(row, 5), ftpHost)
+            mstat.setData(mstat.index(row, 6), ftpUser)
+            mstat.setData(mstat.index(row, 7), ftpPassword)
+            mstat.setData(mstat.index(row, 8), ftpRemoteDir)
+            mstat.setData(mstat.index(row, 9), ftpLocalDir)            
+            mstat.setData(mstat.index(row, 10), comment)
+            mstat.setData(mstat.index(row, 11), ftpPassiveMode)
+            if not mstat.submitAll():
+                mstat.revertAll()
                 UVLog.show_error("Unable to create station " + name)
                 return
-            self.model.select()
+            mstat.select()
             self.close() 
         except Exception as ex:
             UVLog.show_error(str(ex), True)

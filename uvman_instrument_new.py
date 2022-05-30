@@ -6,15 +6,16 @@ from datetime import datetime
 from uvman_uvlog import UVLog
 
 class UVManInstrumentNew(QDialog):
-    def __init__(self, parent, model, stationModel):
+    def __init__(self, parent):
         super(UVManInstrumentNew, self).__init__(parent)    
 
-        self.ui = uic.loadUi('uvman_instrument_new.ui', self) 
-        self.settings = parent.settings
-        self.model = model
-        self.stationModel = stationModel           
-        self.ui.cboxStation.setModel(self.stationModel)
-        viewColumn = self.stationModel.fieldIndex('label')
+        self.parent = parent
+        self.settings = self.parent.settings        
+        self.models = parent.models
+        self.ui = uic.loadUi('uvman_instrument_new.ui', self)                 
+
+        self.ui.cboxStation.setModel(self.models.station)
+        viewColumn = self.models.station.fieldIndex('label')
         self.ui.cboxStation.setModelColumn(viewColumn)        
         self.ui.dtLastCalibrated.setDateTime(datetime.now())
 
@@ -33,8 +34,8 @@ class UVManInstrumentNew(QDialog):
                 return
             name = self.ui.editName.text()
             
-            stationIndex = self.stationModel.index(self.cboxStation.currentIndex(), self.stationModel.fieldIndex("id"))
-            stationID = self.stationModel.data(stationIndex)            
+            stationIndex = self.models.station.index(self.cboxStation.currentIndex(), self.models.station.fieldIndex("id"))
+            stationID = self.models.station.data(stationIndex)            
             if not stationID:
                 UVLog.show_error("Missing station ID for new instrument")
                 return
@@ -59,28 +60,27 @@ class UVManInstrumentNew(QDialog):
                     raise Exception("Unable to disable other principals for instrument %s" % (id)) 
                 conn.commit()
 
-            row = self.model.rowCount()
-            self.model.insertRow(row)
-            self.model.setData(self.model.index(row, 0), id)
-            self.model.setData(self.model.index(row, 1), name)
-            self.model.setData(self.model.index(row, 2), stationID)
-            self.model.setData(self.model.index(row, 3), active)
-            self.model.setData(self.model.index(row, 4), principal)
-            self.model.setData(self.model.index(row, 5), model)
-            self.model.setData(self.model.index(row, 6), channelCount)
-            self.model.setData(self.model.index(row, 7), lastCalibrated)
-            self.model.setData(self.model.index(row, 8), fetchModule)
-            self.model.setData(self.model.index(row, 9), validateModule)
-            self.model.setData(self.model.index(row, 10), storeModule)
-            self.model.setData(self.model.index(row, 11), matchExpression)
-            self.model.setData(self.model.index(row, 12), comment)
-            if not self.model.submitAll():
-                self.model.revertAll()
+            minst = self.models.instrument
+            row = minst.rowCount()
+            minst.insertRow(row)
+            minst.setData(minst.index(row, 0), id)
+            minst.setData(minst.index(row, 1), name)
+            minst.setData(minst.index(row, 2), stationID)
+            minst.setData(minst.index(row, 3), active)
+            minst.setData(minst.index(row, 4), principal)
+            minst.setData(minst.index(row, 5), model)
+            minst.setData(minst.index(row, 6), channelCount)
+            minst.setData(minst.index(row, 7), lastCalibrated)
+            minst.setData(minst.index(row, 8), fetchModule)
+            minst.setData(minst.index(row, 9), validateModule)
+            minst.setData(minst.index(row, 10), storeModule)
+            minst.setData(minst.index(row, 11), matchExpression)
+            minst.setData(minst.index(row, 12), comment)
+            if not minst.submitAll():
+                minst.revertAll()
                 UVLog.show_error("Unable to create instrument " + name)
                 return            
-
-            self.model.select()
+            minst.select()
             self.close()
-
         except Exception as ex:
             UVLog.show_error(str(ex), True)
