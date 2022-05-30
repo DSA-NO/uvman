@@ -104,7 +104,7 @@ class UVMAN_Measurement():
 
         instrumentIndex = self.models.instrument.index(self.ui.cboxMeasurementsInstrument.currentIndex(), self.models.instrument.fieldIndex("id"))
         instrumentID = self.models.instrument.data(instrumentIndex)            
-        stationIndex = self.stationModel.index(self.ui.cboxMeasurementsStation.currentIndex(), self.models.station.fieldIndex("id"))
+        stationIndex = self.models.station.index(self.ui.cboxMeasurementsStation.currentIndex(), self.models.station.fieldIndex("id"))
         stationID = self.models.station.data(stationIndex) 
         dtFromStr = self.ui.tblMeasurements.item(indexes[0].row(), 1).text()
         dtToStr = self.ui.tblMeasurements.item(indexes[-1].row(), 1).text()        
@@ -145,7 +145,7 @@ class UVMAN_Measurement():
             UVLog.show_error("Query failed: " + conn.lastError().text())
             return        
         conn.commit()         
-        self.onMeasurementsSearch()
+        self.onSearch()
         UVLog.show_message("Principal enabled from " + dtFromStr + " to " + dtToStr)        
 
     def onDisablePrincipal(self):
@@ -157,7 +157,7 @@ class UVMAN_Measurement():
         instrumentIndex = self.models.instrument.index(self.ui.cboxMeasurementsInstrument.currentIndex(), self.models.instrument.fieldIndex("id"))
         instrumentID = self.models.instrument.data(instrumentIndex)
         stationIndex = self.models.station.index(self.ui.cboxMeasurementsStation.currentIndex(), self.models.station.fieldIndex("id"))
-        stationID = self.stationModel.data(stationIndex) 
+        stationID = self.models.station.data(stationIndex) 
         dtFromStr = self.ui.tblMeasurements.item(indexes[0].row(), 1).text()
         dtToStr = self.ui.tblMeasurements.item(indexes[-1].row(), 1).text()        
         
@@ -181,7 +181,7 @@ class UVMAN_Measurement():
             UVLog.show_error("Query failed: " + conn.lastError().text())
             return                
         conn.commit()        
-        self.onMeasurementsSearch()
+        self.onSearch()
         UVLog.show_message("Principal disabled from " + dtFromStr + " to " + dtToStr)        
 
     def onSetStation(self):               
@@ -189,7 +189,7 @@ class UVMAN_Measurement():
         if len(indexes) == 0:
             UVLog.show_error("No rows selected")
             return
-        dlg = UVManStationSelect(self.parent, self.stationModel)
+        dlg = UVManStationSelect(self.parent, self.models.station)
         dlg.setWindowModality(Qt.ApplicationModal)
         if dlg.exec_() != QDialog.Accepted:
             return        
@@ -216,7 +216,7 @@ class UVMAN_Measurement():
                 UVLog.show_error("Query failed: " + conn.lastError().text())
                 return                
         conn.commit()        
-        self.onMeasurementsSearch()
+        self.onSearch()
         UVLog.show_message("Station changed")   
 
     def onDelete(self):               
@@ -230,7 +230,7 @@ class UVMAN_Measurement():
         instrumentIndex = self.models.instrument.index(self.ui.cboxMeasurementsInstrument.currentIndex(), self.models.instrument.fieldIndex("id"))
         instrumentID = self.models.instrument.data(instrumentIndex)                    
         stationIndex = self.models.station.index(self.ui.cboxMeasurementsStation.currentIndex(), self.models.station.fieldIndex("id"))
-        stationID = self.stationModel.data(stationIndex) 
+        stationID = self.models.station.data(stationIndex) 
         conn = QSqlDatabase.database('query')
         conn.transaction()
         query = QSqlQuery(conn)        
@@ -251,5 +251,5 @@ class UVMAN_Measurement():
                 UVLog.show_error("Query failed: " + conn.lastError().text())
                 return                
         conn.commit()        
-        self.onMeasurementsSearch()
+        self.onSearch()
         UVLog.show_message("Measurements deleted")   

@@ -27,7 +27,7 @@ class UVMAN_Instrument():
         self.ui.btnInstrumentDelete.clicked.connect(self.onDelete)                
 
     def onNew(self):    
-        dlg = UVManInstrumentNew(self, self.models.instrument, self.models.station)
+        dlg = UVManInstrumentNew(self.parent, self.models.instrument, self.models.station)
         dlg.setWindowModality(Qt.ApplicationModal)
         dlg.exec_()        
 
@@ -36,7 +36,7 @@ class UVMAN_Instrument():
         if not index.isValid():            
             UVLog.show_error("No row selected")
             return
-        dlg = UVManInstrumentEdit(self, index, self.models.instrument, self.models.station)
+        dlg = UVManInstrumentEdit(self.parent, index, self.models.instrument, self.models.station)
         dlg.setWindowModality(Qt.ApplicationModal)
         dlg.exec_()        
 
@@ -47,7 +47,7 @@ class UVMAN_Instrument():
             return
         record = self.models.instrument.record(index.row())
         name = record.value(1)        
-        if (QMessageBox.question(self, "Confirmation", ("Delete {0} from instruments?".format(name)), QMessageBox.Yes | QMessageBox.No) == QMessageBox.No):
+        if (QMessageBox.question(self.parent, "Confirmation", ("Delete {0} from instruments?".format(name)), QMessageBox.Yes | QMessageBox.No) == QMessageBox.No):
             return
         self.models.instrument.removeRow(index.row())                
         if not self.models.instrument.submitAll():

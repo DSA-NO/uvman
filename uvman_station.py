@@ -31,7 +31,7 @@ class UVMAN_Station():
         self.ui.btnStationDelete.clicked.connect(self.onDelete)               
 
     def onNew(self):    
-        dlg = UVManStationNew(self, self.models.station)
+        dlg = UVManStationNew(self.parent, self.models.station)
         dlg.setWindowModality(Qt.ApplicationModal)
         dlg.exec_()        
 
@@ -40,7 +40,7 @@ class UVMAN_Station():
         if not index.isValid():        
             UVLog.show_error("No row selected")
             return
-        dlg = UVManStationEdit(self, index, self.models.station)
+        dlg = UVManStationEdit(self.parent, index, self.models.station)
         dlg.setWindowModality(Qt.ApplicationModal)
         dlg.exec_()        
 
@@ -51,7 +51,7 @@ class UVMAN_Station():
             return
         record = self.models.station.record(index.row())
         name = record.value(1)        
-        if (QMessageBox.question(self, "Confirmation", ("Delete {0} from stations?".format(name)), QMessageBox.Yes | QMessageBox.No) == QMessageBox.No):
+        if (QMessageBox.question(self.parent, "Confirmation", ("Delete {0} from stations?".format(name)), QMessageBox.Yes | QMessageBox.No) == QMessageBox.No):
             return
         self.models.station.removeRow(index.row())
         if not self.models.station.submitAll():

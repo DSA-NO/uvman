@@ -5,7 +5,7 @@ from uvman_uvlog import UVLog
 
 class UVManProductEdit(QDialog):
     def __init__(self, parent, index, model):
-        super(UVManProductEdit, self).__init__(parent.parent)    
+        super(UVManProductEdit, self).__init__(parent)    
 
         self.ui = uic.loadUi('uvman_product_edit.ui', self) 
         self.settings = parent.settings
