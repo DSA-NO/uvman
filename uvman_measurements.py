@@ -17,7 +17,7 @@ class UVMAN_Measurements():
         self.ui.dtMeasurementsFrom.setDateTime(cdt.addDays(-1))
         self.ui.dtMeasurementsTo.setDateTime(cdt)
 
-        self.channelFormat_delegate = ChannelFormatDelegate()        
+        self.channelFormat_delegate = ChannelFormatDelegate()
 
     def onMeasurementsSearch(self):               
         try:

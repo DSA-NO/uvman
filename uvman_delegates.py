@@ -9,5 +9,5 @@ class PasswordDelegate(QStyledItemDelegate):
 
 class ChannelFormatDelegate(QStyledItemDelegate):
     def displayText(self, value, locale):        
-        formattedNum = locale.toString(float(value), 'f', 8)
+        formattedNum = locale.toString(float(value), 'f', 5)
         return formattedNum

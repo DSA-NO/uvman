@@ -15,6 +15,7 @@ from uvman_instrument_edit import UVManInstrumentEdit
 from uvman_delegates import PasswordDelegate
 from uvman_models import UVMAN_Models
 from uvman_measurements import UVMAN_Measurements
+from uvman_factors import UVMAN_Factors
 from uvman_uvlog import UVLog
 
 class UVManagerException(Exception):
@@ -70,11 +71,12 @@ class UVManager(QMainWindow):
         conn_query.setDatabaseName(self.settings.value('connection_string'))
         if not conn_query.open():
             UVLog.show_message(conn_query.lastError().text())
-            return
+            return        
 
         UVLog.log_message('Creating models')
         self.models = UVMAN_Models(self, log)        
 
+        UVLog.log_message('Setup UI components')
         self.ui.tblStations.setModel(self.models.station)
         self.ui.tblStations.setEditTriggers(QAbstractItemView.NoEditTriggers)
         #self.ui.tblStations.setStyleSheet("QHeaderView::section { background-color: rgba(0, 0, 255, 128) }")
@@ -106,6 +108,10 @@ class UVManager(QMainWindow):
         header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
         header.setDefaultAlignment(Qt.AlignLeft)
 
+        self.ui.cboxFactorsInstruments.setModel(self.models.instrument)
+        viewColumn = self.models.instrument.fieldIndex('id')
+        self.ui.cboxFactorsInstruments.setModelColumn(viewColumn)
+
         self.ui.cboxFactorsProducts.setModel(self.models.product)
         viewColumn = self.models.product.fieldIndex('label')
         self.ui.cboxFactorsProducts.setModelColumn(viewColumn)
@@ -117,6 +123,9 @@ class UVManager(QMainWindow):
 
         # Connect signals
         UVLog.log_message('Connecting signals')
+
+        self.ui.tabs.currentChanged.connect(self.tabsCurrentChanged)
+        self.ui.tabs.setCurrentIndex(1)
         
         self.ui.btnStationNew.clicked.connect(self.onNewStation)
         self.ui.btnStationEdit.clicked.connect(self.onEditStation)
@@ -130,7 +139,15 @@ class UVManager(QMainWindow):
         self.ui.btnMeasurementsEnablePrincipal.clicked.connect(self.uvman_measurements.onEnablePrincipal)      
         self.ui.btnMeasurementsDisablePrincipal.clicked.connect(self.uvman_measurements.onDisablePrincipal)      
         self.ui.btnMeasurementsSetStation.clicked.connect(self.uvman_measurements.onSetStation)      
-        self.ui.btnMeasurementsDelete.clicked.connect(self.uvman_measurements.onDelete)         
+        self.ui.btnMeasurementsDelete.clicked.connect(self.uvman_measurements.onDelete)  
+
+        self.uvman_factors = UVMAN_Factors(self)
+        self.ui.cboxFactorsInstruments.currentIndexChanged.connect(self.uvman_factors.onSelectFactors)
+        self.ui.cboxFactorsProducts.currentIndexChanged.connect(self.uvman_factors.onSelectFactors)
+
+    def tabsCurrentChanged(self, index):
+        if index == 4:
+            self.uvman_factors.onSelectFactors()
 
     def onNewStation(self):    
         dlg = UVManStationNew(self, self.models.station)

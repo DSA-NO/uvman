@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>974</width>
-    <height>722</height>
+    <width>1202</width>
+    <height>856</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,7 +33,7 @@
     <item>
      <widget class="QTabWidget" name="tabs">
       <property name="currentIndex">
-       <number>5</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="tabSettings">
        <attribute name="title">
@@ -606,22 +606,19 @@
            <item>
             <widget class="QLabel" name="lblFactorsProduct">
              <property name="text">
-              <string>Select a product</string>
+              <string>Select instrument and product</string>
              </property>
             </widget>
            </item>
            <item>
-            <spacer name="hSpacerFactors1">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
+            <widget class="QComboBox" name="cboxFactorsInstruments">
+             <property name="minimumSize">
               <size>
-               <width>601</width>
-               <height>20</height>
+               <width>240</width>
+               <height>0</height>
               </size>
              </property>
-            </spacer>
+            </widget>
            </item>
            <item>
             <widget class="QComboBox" name="cboxFactorsProducts">
@@ -638,6 +635,19 @@
               </size>
              </property>
             </widget>
+           </item>
+           <item>
+            <spacer name="hSpacerFactors1">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>601</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </widget>
@@ -692,6 +702,111 @@
              <attribute name="verticalHeaderVisible">
               <bool>false</bool>
              </attribute>
+             <column>
+              <property name="text">
+               <string>Valid from</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Valid to</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>c305</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>c313</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>c320</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>c340</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>c380</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>c395</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>c412</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>c443</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>c490</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>c532</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>c555</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>c665</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>c780</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>c875</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>c940</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>c1020</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>c1245</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>c1640</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>par</string>
+              </property>
+             </column>
             </widget>
            </item>
           </layout>
@@ -1011,7 +1126,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>974</width>
+     <width>1202</width>
      <height>26</height>
     </rect>
    </property>
