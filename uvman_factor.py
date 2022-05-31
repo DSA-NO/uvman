@@ -1,7 +1,11 @@
-from PyQt5.QtCore import QDateTime, Qt
+# -*- coding: utf-8 -*-
+
+from PyQt5.QtCore import Qt
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
+from PyQt5.QtWidgets import QTableWidgetItem
 from uvman_delegate import ChannelFormatDelegate
+from uvman_factor_new import UVManFactorNew
+from uvman_factor_edit import UVManFactorEdit
 from uvman_uvlog import UVLog
 
 class UVMAN_Factor():
@@ -21,7 +25,10 @@ class UVMAN_Factor():
         self.ui.cboxFactorsProducts.setModelColumn(viewColumn)
         
         self.ui.cboxFactorsInstruments.currentIndexChanged.connect(self.onSelectFactor)
-        self.ui.cboxFactorsProducts.currentIndexChanged.connect(self.onSelectFactor)      
+        self.ui.cboxFactorsProducts.currentIndexChanged.connect(self.onSelectFactor)  
+
+        self.ui.btnFactorsNew.clicked.connect(self.onNew)            
+        self.ui.btnFactorsEdit.clicked.connect(self.onEdit)            
 
     def onSelectFactor(self):               
         try:
@@ -72,3 +79,30 @@ class UVMAN_Factor():
 
         except Exception as ex:
             UVLog.show_error(str(ex), True)
+
+    def onNew(self):  
+        instrumentIndex = self.models.instrument.index(self.ui.cboxFactorsInstruments.currentIndex(), self.models.instrument.fieldIndex("id"))
+        instrumentID = self.models.instrument.data(instrumentIndex)            
+        productIndex = self.models.product.index(self.ui.cboxFactorsProducts.currentIndex(), self.models.product.fieldIndex("id"))
+        productID = self.models.product.data(productIndex)  
+        dlg = UVManFactorNew(self.parent, instrumentID, productID)
+        dlg.setWindowModality(Qt.ApplicationModal)
+        dlg.exec_()        
+        if dlg.getRefresh():
+            self.onSelectFactor()
+
+    def onEdit(self):  
+        instrumentIndex = self.models.instrument.index(self.ui.cboxFactorsInstruments.currentIndex(), self.models.instrument.fieldIndex("id"))
+        instrumentID = self.models.instrument.data(instrumentIndex)            
+        productIndex = self.models.product.index(self.ui.cboxFactorsProducts.currentIndex(), self.models.product.fieldIndex("id"))
+        productID = self.models.product.data(productIndex)  
+
+        index = self.ui.tblFactors.currentIndex()
+        if not index.isValid():        
+            UVLog.show_error("No row selected")
+            return
+        dlg = UVManFactorEdit(self.parent, instrumentID, productID, index)
+        dlg.setWindowModality(Qt.ApplicationModal)
+        dlg.exec_()        
+        if dlg.getRefresh():
+            self.onSelectFactor()

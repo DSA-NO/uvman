@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>453</width>
+    <height>815</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Edit factor</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="editInstrumentID">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="16" column="1">
+      <widget class="QLineEdit" name="editC665"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="lblValidFrom">
+       <property name="text">
+        <string>Valid from</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="lblInstrumentId">
+       <property name="text">
+        <string>Instrument ID</string>
+       </property>
+      </widget>
+     </item>
+     <item row="21" column="1">
+      <widget class="QLineEdit" name="editC1245"/>
+     </item>
+     <item row="13" column="1">
+      <widget class="QLineEdit" name="editC490"/>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="lblC340">
+       <property name="text">
+        <string>c340</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QLineEdit" name="editC380"/>
+     </item>
+     <item row="12" column="0">
+      <widget class="QLabel" name="lblC443">
+       <property name="text">
+        <string>c443</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="lblValidTo">
+       <property name="text">
+        <string>Valid to</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="editC313"/>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="lblC320">
+       <property name="text">
+        <string>c320</string>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="0">
+      <widget class="QLabel" name="lblC532">
+       <property name="text">
+        <string>c532</string>
+       </property>
+      </widget>
+     </item>
+     <item row="20" column="1">
+      <widget class="QLineEdit" name="editC1020"/>
+     </item>
+     <item row="10" column="1">
+      <widget class="QLineEdit" name="editC395"/>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLineEdit" name="editC320"/>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="lblC305">
+       <property name="text">
+        <string>c305</string>
+       </property>
+      </widget>
+     </item>
+     <item row="18" column="1">
+      <widget class="QLineEdit" name="editC875"/>
+     </item>
+     <item row="11" column="0">
+      <widget class="QLabel" name="lblC412">
+       <property name="text">
+        <string>c412</string>
+       </property>
+      </widget>
+     </item>
+     <item row="22" column="1">
+      <widget class="QLineEdit" name="editC1640"/>
+     </item>
+     <item row="3" column="1">
+      <widget class="QDateTimeEdit" name="dtValidTo"/>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="editFactorID">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="15" column="1">
+      <widget class="QLineEdit" name="editC555"/>
+     </item>
+     <item row="11" column="1">
+      <widget class="QLineEdit" name="editC412"/>
+     </item>
+     <item row="7" column="1">
+      <widget class="QLineEdit" name="editC340"/>
+     </item>
+     <item row="2" column="1">
+      <widget class="QDateTimeEdit" name="dtValidFrom"/>
+     </item>
+     <item row="10" column="0">
+      <widget class="QLabel" name="lblC395">
+       <property name="text">
+        <string>c395</string>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="1">
+      <widget class="QLineEdit" name="editC532"/>
+     </item>
+     <item row="19" column="1">
+      <widget class="QLineEdit" name="editC940"/>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="lblC313">
+       <property name="text">
+        <string>c313</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="lblC380">
+       <property name="text">
+        <string>c380</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="lblFactortypeID">
+       <property name="text">
+        <string>Factortype ID</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="editC305"/>
+     </item>
+     <item row="17" column="1">
+      <widget class="QLineEdit" name="editC780"/>
+     </item>
+     <item row="12" column="1">
+      <widget class="QLineEdit" name="editC443"/>
+     </item>
+     <item row="13" column="0">
+      <widget class="QLabel" name="lblC490">
+       <property name="text">
+        <string>c490</string>
+       </property>
+      </widget>
+     </item>
+     <item row="23" column="1">
+      <widget class="QLineEdit" name="editPar"/>
+     </item>
+     <item row="15" column="0">
+      <widget class="QLabel" name="lblC555">
+       <property name="text">
+        <string>c555</string>
+       </property>
+      </widget>
+     </item>
+     <item row="16" column="0">
+      <widget class="QLabel" name="lblC665">
+       <property name="text">
+        <string>c665</string>
+       </property>
+      </widget>
+     </item>
+     <item row="17" column="0">
+      <widget class="QLabel" name="lblC780">
+       <property name="text">
+        <string>c780</string>
+       </property>
+      </widget>
+     </item>
+     <item row="18" column="0">
+      <widget class="QLabel" name="lblC875">
+       <property name="text">
+        <string>c875</string>
+       </property>
+      </widget>
+     </item>
+     <item row="19" column="0">
+      <widget class="QLabel" name="lblC940">
+       <property name="text">
+        <string>c940</string>
+       </property>
+      </widget>
+     </item>
+     <item row="20" column="0">
+      <widget class="QLabel" name="lblC1020">
+       <property name="text">
+        <string>c1020</string>
+       </property>
+      </widget>
+     </item>
+     <item row="21" column="0">
+      <widget class="QLabel" name="lblC1245">
+       <property name="text">
+        <string>c1245</string>
+       </property>
+      </widget>
+     </item>
+     <item row="22" column="0">
+      <widget class="QLabel" name="lblC1640">
+       <property name="text">
+        <string>c1640</string>
+       </property>
+      </widget>
+     </item>
+     <item row="23" column="0">
+      <widget class="QLabel" name="lblPar">
+       <property name="text">
+        <string>par</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>Dialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>Dialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
