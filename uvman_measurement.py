@@ -1,6 +1,7 @@
 from PyQt5.QtCore import QDateTime, Qt
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
+from PyQt5.QtGui import QIcon
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from uvman_delegate import ChannelFormatDelegate
 from uvman_uvlog import UVLog
@@ -22,15 +23,18 @@ class UVMAN_Measurement():
         self.ui.cboxMeasurementsStation.setModel(self.models.station)
         vcMeasurementsStation = self.models.station.fieldIndex('label')
         self.ui.cboxMeasurementsStation.setModelColumn(vcMeasurementsStation)          
-        self.ui.btnMeasurementsStationClear.clicked.connect(self.onStationClear)      
+        self.ui.btnMeasurementsStationClear.clicked.connect(self.onStationClear) 
+        self.ui.btnMeasurementsStationClear.setIcon(QIcon(":/images/clear-128.png"))        
 
         self.ui.cboxMeasurementsChannels.setModel(self.models.channel_count)                
         self.ui.btnMeasurementsChannelsClear.clicked.connect(self.onChannelsClear)      
+        self.ui.btnMeasurementsChannelsClear.setIcon(QIcon(":/images/clear-128.png"))
 
         self.ui.cboxMeasurementsInstrument.setModel(self.models.instrument)
         vcMeasurementsInstrument = self.models.instrument.fieldIndex('id')
         self.ui.cboxMeasurementsInstrument.setModelColumn(vcMeasurementsInstrument)  
-        self.ui.btnMeasurementsInstrumentClear.clicked.connect(self.onInstrumentClear)      
+        self.ui.btnMeasurementsInstrumentClear.clicked.connect(self.onInstrumentClear)
+        self.ui.btnMeasurementsInstrumentClear.setIcon(QIcon(":/images/clear-128.png"))
 
         header = self.ui.tblMeasurements.horizontalHeader()
         header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)       
@@ -42,6 +46,10 @@ class UVMAN_Measurement():
         self.ui.btnMeasurementsDisablePrincipal.clicked.connect(self.onDisablePrincipal)      
         self.ui.btnMeasurementsSetStation.clicked.connect(self.onSetStation)      
         self.ui.btnMeasurementsDelete.clicked.connect(self.onDelete)  
+        
+        self.onStationClear()
+        self.onChannelsClear()
+        self.onInstrumentClear()
 
     def onStationClear(self):
         self.ui.cboxMeasurementsStation.setCurrentIndex(-1)

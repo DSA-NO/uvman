@@ -8,5 +8,6 @@
 	<file>uvman-128.png</file>
 	<file>uvman-256.png</file>
 	<file>uvman-512.png</file>	
+	<file>clear-128.png</file>	
   </qresource>
 </RCC>
