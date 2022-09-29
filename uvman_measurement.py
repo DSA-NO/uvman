@@ -65,34 +65,31 @@ class UVMAN_Measurement():
             conn = QSqlDatabase.database('query')
             query = QSqlQuery(conn)
             queryStr = """
-select i.id, m.*
-from measurement m, instrument i
-where m.instrument_id = i.id and m.measurement_date >= :start_date and m.measurement_date < :end_date
+select s.label, i.id, i.channel_count, m.*
+from measurement m, instrument i, station s
+where m.instrument_id = i.id and m.station_id = s.id and m.measurement_date >= :start_date and m.measurement_date < :end_date
 """
             dtFrom = self.ui.dtMeasurementsFrom.dateTime()
             dtFromStr = dtFrom.toString("yyyy-MM-dd HH:mm:ss")            
             dtTo = self.ui.dtMeasurementsTo.dateTime()
             dtToStr = dtTo.toString("yyyy-MM-dd HH:mm:ss")                                    
 
-            bind_station = False
+            stationId = None
             if self.ui.cboxMeasurementsStation.currentIndex() > -1:
                 stationIndex = self.models.station.index(self.ui.cboxMeasurementsStation.currentIndex(), self.models.station.fieldIndex("id"))
-                stationID = self.models.station.data(stationIndex)
+                stationId = self.models.station.data(stationIndex)
                 queryStr += " and m.station_id = :station_id"
-                bind_station = True                
             
-            bind_channels = False
+            channels = None
             if self.ui.cboxMeasurementsChannels.currentText():
                 channels = int(self.ui.cboxMeasurementsChannels.currentText())
                 queryStr += " and i.channel_count = :channel_count"
-                bind_channels = True                
 
-            bind_instrument = False
+            instrumentId = None
             if self.ui.cboxMeasurementsInstrument.currentIndex() > -1:
                 instrumentIndex = self.models.instrument.index(self.ui.cboxMeasurementsInstrument.currentIndex(), self.models.instrument.fieldIndex("id"))
-                instrumentID = self.models.instrument.data(instrumentIndex)                        
+                instrumentId = self.models.instrument.data(instrumentIndex)                        
                 queryStr += " and m.instrument_id = :instrument_id"
-                bind_instrument = True                
             
             queryStr += " order by m.measurement_date asc"
 
@@ -101,14 +98,14 @@ where m.instrument_id = i.id and m.measurement_date >= :start_date and m.measure
             query.bindValue(":start_date", dtFromStr)
             query.bindValue(":end_date", dtToStr)
 
-            if bind_station:
-                query.bindValue(":station_id", stationID)
+            if stationId:
+                query.bindValue(":station_id", stationId)
 
-            if bind_channels:
+            if channels:
                 query.bindValue(":channel_count", channels)
 
-            if bind_instrument:
-                query.bindValue(":instrument_id", instrumentID)            
+            if instrumentId:
+                query.bindValue(":instrument_id", instrumentId)            
             
             success = query.exec()
             if not success:                                
@@ -119,33 +116,35 @@ where m.instrument_id = i.id and m.measurement_date >= :start_date and m.measure
             while query.next():
                 rowPosition = self.ui.tblMeasurements.rowCount()
                 self.ui.tblMeasurements.insertRow(rowPosition)            
-                self.ui.tblMeasurements.setItem(rowPosition, 0, QTableWidgetItem(str(query.value("id"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 1, QTableWidgetItem(str(query.value("principal"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 2, QTableWidgetItem(query.value("measurement_date").toString("yyyy-MM-dd hh:mm:ss")))
-                self.ui.tblMeasurements.setItem(rowPosition, 3, QTableWidgetItem(str(query.value("e305"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 4, QTableWidgetItem(str(query.value("e313"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 5, QTableWidgetItem(str(query.value("e320"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 6, QTableWidgetItem(str(query.value("e340"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 7, QTableWidgetItem(str(query.value("e380"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 8, QTableWidgetItem(str(query.value("e395"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 9, QTableWidgetItem(str(query.value("e412"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 10, QTableWidgetItem(str(query.value("e443"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 11, QTableWidgetItem(str(query.value("e490"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 12, QTableWidgetItem(str(query.value("e532"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 13, QTableWidgetItem(str(query.value("e555"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 14, QTableWidgetItem(str(query.value("e665"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 15, QTableWidgetItem(str(query.value("e780"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 16, QTableWidgetItem(str(query.value("e875"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 17, QTableWidgetItem(str(query.value("e940"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 18, QTableWidgetItem(str(query.value("e1020"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 19, QTableWidgetItem(str(query.value("e1245"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 20, QTableWidgetItem(str(query.value("e1640"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 21, QTableWidgetItem(str(query.value("par"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 22, QTableWidgetItem(str(query.value("dtemp"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 23, QTableWidgetItem(str(query.value("zenith"))))
-                self.ui.tblMeasurements.setItem(rowPosition, 24, QTableWidgetItem(str(query.value("azimuth"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 0, QTableWidgetItem(str(query.value("label"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 1, QTableWidgetItem(str(query.value("id"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 2, QTableWidgetItem(str(query.value("channel_count"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 3, QTableWidgetItem(str(query.value("principal"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 4, QTableWidgetItem(query.value("measurement_date").toString("yyyy-MM-dd hh:mm:ss")))
+                self.ui.tblMeasurements.setItem(rowPosition, 5, QTableWidgetItem(str(query.value("e305"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 6, QTableWidgetItem(str(query.value("e313"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 7, QTableWidgetItem(str(query.value("e320"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 8, QTableWidgetItem(str(query.value("e340"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 9, QTableWidgetItem(str(query.value("e380"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 10, QTableWidgetItem(str(query.value("e395"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 11, QTableWidgetItem(str(query.value("e412"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 12, QTableWidgetItem(str(query.value("e443"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 13, QTableWidgetItem(str(query.value("e490"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 14, QTableWidgetItem(str(query.value("e532"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 15, QTableWidgetItem(str(query.value("e555"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 16, QTableWidgetItem(str(query.value("e665"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 17, QTableWidgetItem(str(query.value("e780"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 18, QTableWidgetItem(str(query.value("e875"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 19, QTableWidgetItem(str(query.value("e940"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 20, QTableWidgetItem(str(query.value("e1020"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 21, QTableWidgetItem(str(query.value("e1245"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 22, QTableWidgetItem(str(query.value("e1640"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 23, QTableWidgetItem(str(query.value("par"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 24, QTableWidgetItem(str(query.value("dtemp"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 25, QTableWidgetItem(str(query.value("zenith"))))
+                self.ui.tblMeasurements.setItem(rowPosition, 26, QTableWidgetItem(str(query.value("azimuth"))))
                 
-                for i in range(3, 25):
+                for i in range(5, 27):
                     self.ui.tblMeasurements.setItemDelegateForColumn(i, self.channelFormat_delegate)
             
             UVLog.show_message("Showing %d measurements" % (self.ui.tblMeasurements.rowCount()))

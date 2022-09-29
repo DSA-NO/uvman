@@ -1160,17 +1160,27 @@
           </attribute>
           <column>
            <property name="text">
-            <string>Instrument</string>
+            <string>Station</string>
            </property>
           </column>
           <column>
            <property name="text">
-            <string>Principal</string>
+            <string>Instr</string>
            </property>
           </column>
           <column>
            <property name="text">
-            <string>Measurement date</string>
+            <string>#Ch</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Pr</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Meas. date</string>
            </property>
           </column>
           <column>
