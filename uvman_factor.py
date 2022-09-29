@@ -88,7 +88,7 @@ class UVMAN_Factor():
         dlg = UVManFactorNew(self.parent, instrumentID, productID)
         dlg.setWindowModality(Qt.ApplicationModal)
         dlg.exec_()        
-        if dlg.getRefresh():
+        if dlg.needRefresh():
             self.onSelectFactor()
 
     def onEdit(self):  
@@ -104,5 +104,5 @@ class UVMAN_Factor():
         dlg = UVManFactorEdit(self.parent, instrumentID, productID, index)
         dlg.setWindowModality(Qt.ApplicationModal)
         dlg.exec_()        
-        if dlg.getRefresh():
+        if dlg.needRefresh():
             self.onSelectFactor()

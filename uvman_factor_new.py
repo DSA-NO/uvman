@@ -23,10 +23,10 @@ class UVManFactorNew(QDialog):
         self.ui.dtValidFrom.setDateTime(datetime.now())
         self.ui.dtValidTo.setDateTime(datetime.now())    
 
-        self.refresh = False
+        self.need_refresh = False
 
-    def getRefresh(self):
-        return self.refresh
+    def needRefresh(self):
+        return self.need_refresh
 
     def accept(self):   
         try:     
@@ -174,7 +174,7 @@ class UVManFactorNew(QDialog):
                 UVLog.show_error("Unable to create factors for %s|%s: %s" % (instid, factid, msg))
                 return            
             mfact.select()
-            self.refresh = True
+            self.need_refresh = True
             self.close()
         except Exception as ex:
             UVLog.show_error(str(ex), True)

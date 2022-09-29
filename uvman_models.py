@@ -1,8 +1,8 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtSql import QSqlDatabase, QSqlRelation, QSqlRelationalTableModel, QSqlTableModel
+from PyQt5.QtSql import QSqlDatabase, QSqlRelation, QSqlRelationalTableModel, QSqlTableModel, QSqlQueryModel
 
 class UVMAN_Models():
-    def __init__(self, parent, log):            
+    def __init__(self, parent):            
         conn = QSqlDatabase.database('model')
         
         # Station model
@@ -84,4 +84,9 @@ class UVMAN_Models():
         self.product.setEditStrategy(QSqlTableModel.OnManualSubmit)
         self.product.select()
         self.product.setHeaderData(0, Qt.Horizontal, "ID")
-        self.product.setHeaderData(1, Qt.Horizontal, "Name")         
+        self.product.setHeaderData(1, Qt.Horizontal, "Name")    
+
+        # Channel count model
+        self.channel_count = QSqlQueryModel(parent)
+        self.channel_count.setQuery("select distinct channel_count from instrument order by channel_count desc", conn);        
+        self.channel_count.setHeaderData(0, Qt.Horizontal, "Channels");     

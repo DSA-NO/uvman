@@ -45,10 +45,10 @@ class UVManFactorEdit(QDialog):
         self.ui.editC1640.setText(str(record.value(22)))
         self.ui.editPar.setText(str(record.value(23)))
 
-        self.refresh = False
+        self.need_refresh = False
 
-    def getRefresh(self):
-        return self.refresh
+    def needRefresh(self):
+        return self.need_refresh
 
     def accept(self):   
         try:     
@@ -193,7 +193,7 @@ class UVManFactorEdit(QDialog):
                 UVLog.show_error("Unable to create factors for %s|%s: %s" % (instid, factid, msg))
                 return            
             mfact.select()
-            self.refresh = True
+            self.need_refresh = True
             self.close()
         except Exception as ex:
             UVLog.show_error(str(ex), True)

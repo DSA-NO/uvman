@@ -26,7 +26,6 @@ class UVManager(QMainWindow):
                         
         self.ui = uic.loadUi('uvman.ui', self) 
         UVLog.init(log, self.ui.statusBar)
-        UVLog.log_message('Loading GUI')
 
         script_dir = Path( __file__ ).parent.absolute()
         UVLog.log_message("Using script directory: %s" % script_dir) 
@@ -71,12 +70,12 @@ class UVManager(QMainWindow):
             return        
 
         UVLog.log_message('Creating models')
-        self.models = UVMAN_Models(self, log)                
+        self.models = UVMAN_Models(self)
 
         UVLog.log_message('Setup UI components')
         self.uvman_station = UVMAN_Station(self)
         self.uvman_instrument = UVMAN_Instrument(self)
-        self.uvman_measurement = UVMAN_Measurement(self)        
+        self.uvman_measurement = UVMAN_Measurement(self)
         self.uvman_factor = UVMAN_Factor(self)        
         self.uvman_product = UVMAN_Product(self)
         
