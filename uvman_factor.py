@@ -2,7 +2,7 @@
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 from uvman_delegate import ChannelFormatDelegate
 from uvman_factor_new import UVManFactorNew
 from uvman_factor_edit import UVManFactorEdit
@@ -28,7 +28,8 @@ class UVMAN_Factor():
         self.ui.cboxFactorsProducts.currentIndexChanged.connect(self.onSelectFactor)  
 
         self.ui.btnFactorsNew.clicked.connect(self.onNew)            
-        self.ui.btnFactorsEdit.clicked.connect(self.onEdit)            
+        self.ui.btnFactorsEdit.clicked.connect(self.onEdit)
+        self.ui.btnFactorsDelete.clicked.connect(self.onDelete)
 
     def onSelectFactor(self):               
         try:
@@ -106,3 +107,21 @@ class UVMAN_Factor():
         dlg.exec_()        
         if dlg.needRefresh():
             self.onSelectFactor()
+
+    def onDelete(self):
+        index = self.ui.tblFactors.currentIndex()
+        if not index.isValid():        
+            UVLog.show_error("No row selected")
+            return
+        record = self.models.factor.record(index.row())
+        start_date = record.value(3).toString("yyyy-MM-dd")
+        end_date = record.value(4).toString("yyyy-MM-dd")
+        if (QMessageBox.question(self.parent, "Confirmation", ("Delete {0} -> {1} from factors?".format(start_date, end_date)), QMessageBox.Yes | QMessageBox.No) == QMessageBox.No):
+            return
+        self.models.factor.removeRow(index.row())
+        if not self.models.factor.submitAll():
+            self.models.factor.revertAll()            
+            UVLog.show_error("Unable to remove factor " + start_date + " -> " + end_date)        
+            return
+        self.onSelectFactor()
+        UVLog.show_message("Factor " + start_date + " -> " + end_date + " deleted")    

@@ -45,7 +45,7 @@ class UVMAN_Product():
             return
         record = self.models.product.record(index.row())
         name = record.value(1)        
-        if (QMessageBox.question(self.parent, "Confirmation", ("Delete {0} from models?".format(name)), QMessageBox.Yes | QMessageBox.No) == QMessageBox.No):
+        if (QMessageBox.question(self.parent, "Confirmation", ("Delete {0} from products?".format(name)), QMessageBox.Yes | QMessageBox.No) == QMessageBox.No):
             return
         self.models.product.removeRow(index.row())
         if not self.models.product.submitAll():
